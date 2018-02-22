@@ -8,7 +8,7 @@
  *
  * Created on 14/08/2010, 13:31:14
  */
-package recdadosconteudo;
+package main.java.com.cbir;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -19,6 +19,16 @@ import java.util.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import main.java.com.cbir.CustomFilterImages;
+import main.java.com.cbir.FiltroJPGePNG;
+import main.java.com.cbir.OutputFileGenerator;
+import main.java.com.cbir.HistogramChart;
+import main.java.com.cbir.ImageHandler;
+import main.java.com.cbir.OutputFileManager;
+import main.java.com.cbir.ImageProc;
+import main.java.com.cbir.ImageProcFactory;
+import main.java.com.cbir.DistanceType;
 
 class FiltroJPGePNG implements FilenameFilter {
 
@@ -46,15 +56,15 @@ class CustomFilterImages extends javax.swing.filechooser.FileFilter {
  *
  * @author William
  */
-public class recDadosGUI extends javax.swing.JFrame {
+public class CbirUI extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	public final static String SEP_SIMB = "\\";
 
-	ProcImages queryImg = null, resultImageRef = null;
+	ImageProc queryImg = null, resultImageRef = null;
 
-	GeradorArquivoSaida histFile = null, descrFile = null;
+	OutputFileGenerator histFile = null, descrFile = null;
 
 	Set<String> arqHistSet, arqDescrSet, classesSet;
 
@@ -63,7 +73,7 @@ public class recDadosGUI extends javax.swing.JFrame {
 	Vector<String> resultSet = new Vector<String>();
 
 	/** Creates new form RecDadosUI */
-	public recDadosGUI() {
+	public CbirUI() {
 		initComponents();
 	}
 
@@ -581,11 +591,11 @@ public class recDadosGUI extends javax.swing.JFrame {
 			histFileName = fileChooser.getSelectedFile().getName() + "Hist.txt";
 			descrFileName = fileChooser.getSelectedFile().getName() + "Descr.txt";
 
-			histFile = new GeradorArquivoSaida(histFileName);
-			histFile.criaArquivo();
+			histFile = new OutputFileGenerator(histFileName);
+			histFile.createFile();
 
-			descrFile = new GeradorArquivoSaida(descrFileName);
-			descrFile.criaArquivo();
+			descrFile = new OutputFileGenerator(descrFileName);
+			descrFile.createFile();
 
 			// Le os registros ja armazenados para evitar recalculos
 			OutputFileManager readFile = new OutputFileManager(histFileName);
@@ -627,14 +637,14 @@ public class recDadosGUI extends javax.swing.JFrame {
 			String nomeArq = (String) imageList.getModel().getElementAt(i);
 			String pathCompleto = path + SEP_SIMB + nomeArq;
 
-			ManipuladorImagem imgHandler = null;
+			ImageHandler imgHandler = null;
 			try {
-				imgHandler = new ManipuladorImagem(pathCompleto);
+				imgHandler = new ImageHandler(pathCompleto);
 			} catch (IOException ex) {
 				System.err.println(ex.getMessage());
 			}
 
-			ProcImages procImgLocal = ProcImagesFactory.procImageFactoryMethod(imgHandler);
+			ImageProc procImgLocal = ImageProcFactory.procImageFactoryMethod(imgHandler);
 
 			if (!arqHistSet.contains(nomeArq)) {
 				if (procImgLocal.calcHistograma()) {
@@ -662,22 +672,22 @@ public class recDadosGUI extends javax.swing.JFrame {
 		JOptionPane.showMessageDialog(null, "Features extracted successfully.", "Operation finished",
 				JOptionPane.INFORMATION_MESSAGE);
 
-		histFile.fechaArquivo();
-		descrFile.fechaArquivo();
+		histFile.closeFile();
+		descrFile.closeFile();
 	}// GEN-LAST:event_menuExtratCaracActionPerformed
 
 	private void formWindowClosing(java.awt.event.WindowEvent evt) {// GEN-FIRST:event_formWindowClosing
 		if (histFile != null)
-			histFile.fechaArquivo();
+			histFile.closeFile();
 		if (descrFile != null)
-			descrFile.fechaArquivo();
+			descrFile.closeFile();
 		dispose();
 	}// GEN-LAST:event_formWindowClosing
 
 	private void formWindowOpened(java.awt.event.WindowEvent evt) {// GEN-FIRST:event_formWindowOpened
 	}// GEN-LAST:event_formWindowOpened
 
-	private Vector<Distance> runQuery(ProcImages queryImg, DescriptorType descrCode, TiposDist distCode) {
+	private Vector<Distance> runQuery(ImageProc queryImg, DescriptorType descrCode, DistanceType distCode) {
 
 		if (queryImg == null || descrCode == null || distCode == null)
 			return null;
@@ -746,12 +756,12 @@ public class recDadosGUI extends javax.swing.JFrame {
 			return;
 		}
 
-		TiposDist distCode = null;
+		DistanceType distCode = null;
 
 		if (grupoDist.isSelected(opDistEucl.getModel())) {
-			distCode = TiposDist.EUCLIDIAN;
+			distCode = DistanceType.EUCLIDIAN;
 		} else if (grupoDist.isSelected(opDistManhatan.getModel())) {
-			distCode = TiposDist.MANHATAN;
+			distCode = DistanceType.MANHATAN;
 		} else {
 			JOptionPane.showMessageDialog(null, "Specify a distance function", "Validation error",
 					JOptionPane.ERROR_MESSAGE);
@@ -777,7 +787,7 @@ public class recDadosGUI extends javax.swing.JFrame {
 			} catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(null, "An invalid input was informed!", "Validation error",
 						JOptionPane.ERROR_MESSAGE);
-				return;				
+				return;
 			}
 
 			if (nImgs > vetDist.size())
@@ -809,14 +819,14 @@ public class recDadosGUI extends javax.swing.JFrame {
 	}// GEN-LAST:event_btCancelActionPerformed
 
 	private void setQueryImage(String pathCompleto) {
-		ManipuladorImagem imgHandler = null;
+		ImageHandler imgHandler = null;
 		try {
-			imgHandler = new ManipuladorImagem(pathCompleto);
+			imgHandler = new ImageHandler(pathCompleto);
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage());
 		}
 
-		queryImg = ProcImagesFactory.procImageFactoryMethod(imgHandler);
+		queryImg = ImageProcFactory.procImageFactoryMethod(imgHandler);
 
 		int imgType = queryImg.getImage().getType();
 		if (imgType == BufferedImage.TYPE_USHORT_GRAY || imgType == BufferedImage.TYPE_BYTE_GRAY) {
@@ -870,14 +880,14 @@ public class recDadosGUI extends javax.swing.JFrame {
 
 		String pathCompleto = path + SEP_SIMB + resultSetList.getSelectedValue();
 
-		ManipuladorImagem imgHandler = null;
+		ImageHandler imgHandler = null;
 		try {
-			imgHandler = new ManipuladorImagem(pathCompleto);
+			imgHandler = new ImageHandler(pathCompleto);
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage());
 		}
 
-		resultImageRef = ProcImagesFactory.procImageFactoryMethod(imgHandler);
+		resultImageRef = ImageProcFactory.procImageFactoryMethod(imgHandler);
 
 		ImageIcon im3 = new ImageIcon(pathCompleto);
 		labelImage1.setIcon(im3);
@@ -932,17 +942,17 @@ public class recDadosGUI extends javax.swing.JFrame {
 		return classes;
 	}
 
-	private void getWekaFile(int descrType) {
+	private void getWekaFile(DescriptorType descrType) {
 		String aux;
 
 		switch (descrType) {
-		case (ProcImages.TYPE_DESC_HARA):
+		case HARALICK:
 			aux = "_hara_";
 			break;
-		case (ProcImages.TYPE_DESC_HIST):
+		case HISTOGRAM:
 			aux = "_hist_";
 			break;
-		case (ProcImages.TYPE_DESC_MOMEN):
+		case MOMENTO:
 			aux = "_mom_";
 			break;
 		default:
@@ -957,10 +967,10 @@ public class recDadosGUI extends javax.swing.JFrame {
 		wekaOut.openFile();
 
 		if (!wekaOut.fileExists()) {
-			GeradorArquivoSaida wekaFile = new GeradorArquivoSaida(wekaFileName);
-			wekaFile.criaArquivo();
+			OutputFileGenerator wekaFile = new OutputFileGenerator(wekaFileName);
+			wekaFile.createFile();
 
-			wekaFile.addEntry(ProcImages.getWekaHeader(descrFileName, descrType));
+			wekaFile.addEntry(ImageProc.getWekaHeader(descrFileName, descrType));
 			wekaFile.addEntry(getWekaClasses());
 			wekaFile.addEntry("@DATA\n");
 
@@ -970,32 +980,38 @@ public class recDadosGUI extends javax.swing.JFrame {
 				String nomeArq = (String) imageList.getModel().getElementAt(i);
 				String pathCompleto = path + SEP_SIMB + nomeArq;
 
-				ManipuladorImagem imgHandler = null;
+				ImageHandler imgHandler = null;
 				try {
-					imgHandler = new ManipuladorImagem(pathCompleto);
+					imgHandler = new ImageHandler(pathCompleto);
 				} catch (IOException ex) {
 					System.err.println(ex.getMessage());
 				}
 
-				ProcImages procImgLocal = ProcImagesFactory.procImageFactoryMethod(imgHandler);
-				if (descrType != ProcImages.TYPE_DESC_HIST) {
-					if (procImgLocal.calcCaracteristicas()) {
-						int indexOfUnderS = nomeArq.indexOf("_");
-						wekaFile.addEntry(procImgLocal.getVetCaractString() + nomeArq.substring(0, indexOfUnderS));
-					} else {
-						System.err.println("Error (Weka): Features vector was not " + "calculated!");
-					}
-				} else {
+				ImageProc procImgLocal = ImageProcFactory.procImageFactoryMethod(imgHandler);
+
+				switch (descrType) {
+				case HISTOGRAM:
 					if (procImgLocal.calcHistograma()) {
 						int indexOfUnderS = nomeArq.indexOf("_");
 						wekaFile.addEntry(procImgLocal.getHistogramaString() + nomeArq.substring(0, indexOfUnderS));
 					} else {
 						System.err.println("Error (Weka): Histogram was not " + "calculated!");
 					}
-				}
 
+				case HARALICK:
+				case MOMENTO:
+				default:
+					if (procImgLocal.calcCaracteristicas()) {
+						int indexOfUnderS = nomeArq.indexOf("_");
+						wekaFile.addEntry(procImgLocal.getVetCaractString() + nomeArq.substring(0, indexOfUnderS));
+					} else {
+						System.err.println("Error (Weka): Features vector was not " + "calculated!");
+					}
+					break;
+				}
 			}
-			wekaFile.fechaArquivo();
+
+			wekaFile.closeFile();
 			JOptionPane.showMessageDialog(null, "File " + wekaFileName + " generated successfully.",
 					"Operation finished", JOptionPane.INFORMATION_MESSAGE);
 		} else {
@@ -1006,27 +1022,30 @@ public class recDadosGUI extends javax.swing.JFrame {
 		wekaOut.closeFile();
 	}
 
-	private void menuGerArqWekaHaralickActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuGerArqWekaHaralickActionPerformed
-		getWekaFile(ProcImages.TYPE_DESC_HARA);
-	}// GEN-LAST:event_menuGerArqWekaHaralickActionPerformed
+	private void menuGerArqWekaHaralickActionPerformed(java.awt.event.ActionEvent evt) {
+		getWekaFile(DescriptorType.HARALICK);
+	}
 
-	private void menuGerArqWekaRGBHistActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuGerArqWekaRGBHistActionPerformed
-		getWekaFile(ProcImages.TYPE_DESC_HIST);
-	}// GEN-LAST:event_menuGerArqWekaRGBHistActionPerformed
+	private void menuGerArqWekaRGBHistActionPerformed(java.awt.event.ActionEvent evt) {
+		getWekaFile(DescriptorType.HISTOGRAM);
+	}
 
-	private void menuGerArqWekaRGBMomentActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuGerArqWekaRGBMomentActionPerformed
-		getWekaFile(ProcImages.TYPE_DESC_MOMEN);
-	}// GEN-LAST:event_menuGerArqWekaRGBMomentActionPerformed
+	private void menuGerArqWekaRGBMomentActionPerformed(java.awt.event.ActionEvent evt) {
+		getWekaFile(DescriptorType.MOMENTO);
+	}
 
 	/**
+	 * 
+	 * Main method
+	 * 
 	 * @param args
-	 *            the command line arguments
+	 * 
 	 */
 	public static void main(String args[]) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
-				new recDadosGUI().setVisible(true);
+				new CbirUI().setVisible(true);
 			}
 		});
 	}

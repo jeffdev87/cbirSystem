@@ -1,17 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package recdadosconteudo;
+package main.java.com.cbir;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- *
- * @author William
- */
-public abstract class ProcImages {
+*
+* @author Jefferson William Teixeira
+*/
+public abstract class ImageProc {
     //Constantes
     public final static int HIST_CINZA_DIM = 256;
     public final static int HIST_COR_QTZ_DIM = 64;
@@ -22,15 +18,15 @@ public abstract class ProcImages {
     //Variaveis de classe
     protected int mHistDim = 0;
     protected int mCaractDim = 0;
-    protected ManipuladorImagem mImage;
+    protected ImageHandler mImage;
     protected double mHistograma[];
     protected double mCaracteristicas[];
 
-    public ProcImages() {
+    public ImageProc() {
         mImage = null;
     } 
 
-    public ProcImages(ManipuladorImagem img) {
+    public ImageProc(ImageHandler img) {
         mImage = img;
     } 
     
@@ -39,7 +35,7 @@ public abstract class ProcImages {
 
     public boolean setImage(String imagePath) {
         try {
-            mImage = new ManipuladorImagem(imagePath);
+            mImage = new ImageHandler(imagePath);
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
             return (false);
@@ -50,7 +46,7 @@ public abstract class ProcImages {
         return (true);
     }
 
-    public void setImage(ManipuladorImagem image) {
+    public void setImage(ImageHandler image) {
         mImage = image;
     }    
     
@@ -108,12 +104,12 @@ public abstract class ProcImages {
         return (caracStr);
     }
 
-    public static String getWekaHeader(String relationName, int type) {
+    public static String getWekaHeader(String relationName, DescriptorType type) {
         String header = "@RELATION " + relationName + "\n\n",
                atributes = "";
         
         switch (type) {
-            case TYPE_DESC_HARA:
+            case HARALICK:
                 for (int a = 0; a <= 135; a+=45) {
                     for (int d = 1; d <= 7; d+=2) {
                         String atr = "ang" + a + "d" + d;
@@ -126,15 +122,15 @@ public abstract class ProcImages {
                 }                
                 break;
                 
-            case TYPE_DESC_HIST:
+            case HISTOGRAM:
                 for (int i = 0; i < HIST_COR_QTZ_DIM; i++) {
                     atributes+= "@ATTRIBUTE bin" + i + " REAL\n";
                 }                
                 break;
                 
-            case TYPE_DESC_MOMEN:
+            case MOMENTO:
                 atributes+= "@ATTRIBUTE media REAL\n";
-                for (int i = 2; i <= ProcImagesCor.VET_CARACT_DIM; i++) {
+                for (int i = 2; i <= ImageProcColor.VET_CARACT_DIM; i++) {
                     atributes+= "@ATTRIBUTE momen" + i + " REAL\n";
                 }                 
                 break; 

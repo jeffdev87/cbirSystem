@@ -1,63 +1,48 @@
-package recdadosconteudo;
+package main.java.com.cbir;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class GeradorArquivoSaida {
+/**
+*
+* @author Jefferson William Teixeira
+*/
+public class OutputFileGenerator {
 
-    //Arquivo para escrita
     private FileWriter writer = null;
-
-    //Arquivo de saída
-    private PrintWriter saida = null;
-
+    private PrintWriter output = null;
     private String fileName = null;
 
-    public GeradorArquivoSaida (String fileName){
+    public OutputFileGenerator (String fileName){
         this.fileName = fileName;
     }
 
-    /**
-     *
-     * Método responsável por criar o arquivo de saída.
-     *
-     */
-    public void criaArquivo() {
+    public void createFile() {
         try {
             writer = new FileWriter(new File(this.fileName), true);
-            saida = new PrintWriter(writer);
+            output = new PrintWriter(writer);
         } catch (IOException ex) {
             System.err.println("Erro ao criar o arquivo " + this.fileName + "!");
             System.err.println(ex.getMessage());
         }
     }
 
-    /**
-     *
-     * Método responsável por adicionar um registro ao arquivo.
-     *
-     */
     public boolean addEntry(String str) {
-        if (saida == null)
+        if (output == null)
             return (false);
         else
         {
-            saida.println(str);
-            saida.flush();
+            output.println(str);
+            output.flush();
         }
         return (true);
     }
 
-    /**
-     *
-     * Método responsável por fechar o arquivo de saída.
-     *
-     */
-    public void fechaArquivo() {
+    public void closeFile() {
         try {
-            saida.close();
+            output.close();
             writer.close();
         } catch (IOException ex) {
             System.err.println("Erro ao fechar o arquivo " + this.fileName + "!");
@@ -65,4 +50,3 @@ public class GeradorArquivoSaida {
         }
     }
 }
-

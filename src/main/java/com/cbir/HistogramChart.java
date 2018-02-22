@@ -1,19 +1,23 @@
-package recdadosconteudo;
+package main.java.com.cbir;
 
 import java.awt.image.BufferedImage;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+/**
+*
+* @author Jefferson William Teixeira
+*/
 public class HistogramChart {
 
     private JFreeChart chart;
     private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     private int altura = 240;
     private int largura = 300;
-    private String histTitulo = "Histograma";
-    private String eixo_x = "Escala de Cinza";
-    private String eixo_y = "Freqüência";
+    private String histTitulo = "Histogram";
+    private String eixo_x = "Gray scale";
+    private String eixo_y = "Frequency";
     private PlotOrientation orientacao = PlotOrientation.VERTICAL;
     private boolean show = false;
     private boolean toolTips = false;

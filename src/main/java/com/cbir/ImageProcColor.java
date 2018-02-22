@@ -1,25 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package recdadosconteudo;
+package main.java.com.cbir;
 
 /**
- *
- * @author William
- */
-public class ProcImagesCor extends ProcImages {
+*
+* @author Jefferson William Teixeira
+*/
+public class ImageProcColor extends ImageProc {
     
     public final static int VET_CARACT_DIM = 4;
     public final static int QTZ_FACTOR = 64;
     
-    public ProcImagesCor() {
+    public ImageProcColor() {
         super();
         initMembers();
     }    
 
-    public ProcImagesCor(ManipuladorImagem img) {
+    public ImageProcColor(ImageHandler img) {
         super(img);
         initMembers();
     }

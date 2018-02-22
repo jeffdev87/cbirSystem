@@ -1,19 +1,22 @@
-package recdadosconteudo;
+package main.java.com.cbir;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
-public class ManipuladorImagem {
+/**
+*
+* @author Jefferson William Teixeira
+*/
+public class ImageHandler {
 
     private BufferedImage image;
     private String imageName;
     private int w, h;
     private int imageType;
 
-    public ManipuladorImagem(String path) throws IOException {
+    public ImageHandler(String path) throws IOException {
         try {
             
             File f = new File(path);

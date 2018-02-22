@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package recdadosconteudo;
+package main.java.com.cbir;
 
 /**
  *
- * @author William
+ * @author Jefferson William Teixeira
  */
-public class Distancias {
+public class DistanceFunctions {
     
     public static double distEuclidiana(double vetPrin[], double vetSec[], int dim) {
         double soma = distManhatan(vetPrin, vetSec, dim);
@@ -23,7 +18,7 @@ public class Distancias {
         return (soma);
     }
 
-    public static double[] parseSringToDouble (String vet[], int dim) {
+    public static double[] parseSringToDouble (String vet[], int dim) throws Exception {
         double aux[] = new double[dim];
         
         for (int i = 0; i < dim; i++)

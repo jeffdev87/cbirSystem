@@ -1,8 +1,8 @@
-package recdadosconteudo;
+package main.java.com.cbir;
 
 /**
  *
- * @author Jefferson
+ * @author Jefferson William Teixeira
  */
 public class Distance {
 

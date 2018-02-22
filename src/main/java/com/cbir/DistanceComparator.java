@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package recdadosconteudo;
+package main.java.com.cbir;
 
 import java.util.Comparator;
 
 /**
  *
- * @author Jefferson
+ * @author Jefferson William Teixeira
  */
 public class DistanceComparator implements Comparator<Distance> {
 

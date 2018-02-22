@@ -1,27 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package recdadosconteudo;
+package main.java.com.cbir;
 
 /**
- *
- * @author William
- */
-public class ProcImagesTextura extends ProcImages {
+*
+* @author Jefferson William Teixeira
+*/
+public class ImageProcTexture extends ImageProc {
     
     public final static int VET_DIM_QTZ = 16;
     public final static int QTZ_FACT = 15;
     public final static int N_HAR_DESC = 16;
     public final static int VET_CARACT_DIM = 64;
 
-    public ProcImagesTextura() {
+    public ImageProcTexture() {
         super();
         initMembers();
     }
     
-    public ProcImagesTextura(ManipuladorImagem img) {
+    public ImageProcTexture(ImageHandler img) {
         super(img);
         initMembers();
     }
