@@ -27,22 +27,22 @@ public class OutputFileManager {
         }
     }
 
-    public boolean arquivoCriado() {
+    public boolean fileExists() {
         if (this.input != null) {
             return (true);
         }
         return (false);
     }
 
-    public boolean arquivoVazio() {
+    public boolean emptyFile() {
         if (!this.input.hasNext()) {
             return (true);
         }
         return (false);
     }
 
-    public Set<String> lerTodosNomesDeRegistros() {
-        Set<String> listaNomesArqs = new HashSet();
+    public Set<String> readAllEntriesFromFile() {
+        Set<String> listaNomesArqs = new HashSet<String>();
         
         try {
             while (this.input.hasNextLine()) {
@@ -71,7 +71,7 @@ public class OutputFileManager {
     
     
     public String[] encontrarImgNoArquivo(String queryImageName, int dimCarac) {
-        if (!arquivoCriado())
+        if (!fileExists())
             return (null);
 
         String[] vetAux = null;
@@ -103,13 +103,13 @@ public class OutputFileManager {
         return (vetAux);
     }
  
-    public Vector<EstruturaDist> calcDistancias(double vetCaracRef[],
+    public Vector<Distance> calcDistancias(double vetCaracRef[],
                                                 String imgNameRef,
                                                 TiposDist optDist) {
-        if (!arquivoCriado() || vetCaracRef == null)
+        if (!fileExists() || vetCaracRef == null)
             return (null);
 
-        Vector<EstruturaDist> vetAux = new Vector<EstruturaDist>();
+        Vector<Distance> vetAux = new Vector<Distance>();
 
         try {
             while (this.input.hasNextLine()) {
@@ -125,7 +125,7 @@ public class OutputFileManager {
                             Distancias.parseSringToDouble (vetString,
                                                            vetString.length);
                     
-                    EstruturaDist estDist = new EstruturaDist(imgNameRef,
+                    Distance estDist = new Distance(imgNameRef,
                                                               imgNameBase);
                     switch (optDist) {
                         case EUCLIDIAN:
@@ -164,7 +164,7 @@ public class OutputFileManager {
     }
 
     public void closeFile() {
-        if (arquivoCriado()) {
+        if (fileExists()) {
             this.input.close();
         }
     }

@@ -39,7 +39,7 @@ public class GeradorArquivoSaida {
      * Método responsável por adicionar um registro ao arquivo.
      *
      */
-    public boolean adicionaRegistro(String str) {
+    public boolean addEntry(String str) {
         if (saida == null)
             return (false);
         else

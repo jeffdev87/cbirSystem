@@ -9,6 +9,6 @@ package recdadosconteudo;
  *
  * @author William
  */
-public enum TiposDescritores {
+public enum DescriptorType {
     HISTOGRAM, HARALICK;
 }

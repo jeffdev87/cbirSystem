@@ -1,20 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package recdadosconteudo;
 
 /**
  *
- * @author Va
+ * @author Jefferson
  */
-public class EstruturaDist {
+public class Distance {
 
     String imageNameRef, imageNameBase;
     double dist;
 
-    public EstruturaDist (String ref, String base) {
+    public Distance (String ref, String base) {
         imageNameRef = ref;
         imageNameBase = base;
         dist = 0;
